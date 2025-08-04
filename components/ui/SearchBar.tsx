@@ -9,6 +9,7 @@ interface SearchBarProps {
   className?: string;
   showShortcut?: boolean;
   autoFocus?: boolean;
+  isMobile?: boolean;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -18,6 +19,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   className,
   showShortcut = true,
   autoFocus = false,
+  isMobile = false,
 }) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -56,10 +58,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           'bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm',
           'border-slate-200 dark:border-slate-600',
           isFocused && 'ring-2 ring-blue-500 border-transparent',
-          'hover:border-slate-300 dark:hover:border-slate-500'
+          'hover:border-slate-300 dark:hover:border-slate-500',
+          isMobile ? 'py-1.5' : 'py-2'
         )}
       >
-        <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
+        <Search className={cn(
+          "text-slate-400 flex-shrink-0",
+          isMobile ? "w-3 h-3" : "w-4 h-4"
+        )} />
         
         <input
           ref={inputRef}
@@ -70,19 +76,25 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
-          className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          className={cn(
+            "flex-1 bg-transparent border-none outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500",
+            isMobile ? "text-xs" : "text-sm"
+          )}
         />
         
         {query && (
           <button
             onClick={handleClear}
-            className="w-4 h-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex-shrink-0"
+            className={cn(
+              "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex-shrink-0 touch-target",
+              isMobile ? "w-3 h-3" : "w-4 h-4"
+            )}
           >
-            <X className="w-4 h-4" />
+            <X className={cn("", isMobile ? "w-3 h-3" : "w-4 h-4")} />
           </button>
         )}
         
-        {showShortcut && !query && (
+        {showShortcut && !query && !isMobile && (
           <div className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500">
             <Command className="w-3 h-3" />
             <span>K</span>

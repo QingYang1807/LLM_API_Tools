@@ -8,11 +8,13 @@ type ThemeMode = 'light' | 'dark' | 'auto';
 interface ThemeToggleProps {
   className?: string;
   onThemeChange?: (theme: ThemeMode) => void;
+  isMobile?: boolean;
 }
 
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   className,
   onThemeChange,
+  isMobile = false,
 }) => {
   const [theme, setTheme] = useState<ThemeMode>('auto');
   const [mounted, setMounted] = useState(false);
@@ -63,18 +65,23 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
 
   if (!mounted) {
     return (
-      <div className={cn('w-10 h-10 rounded-lg bg-slate-200 dark:bg-slate-700', className)} />
+      <div className={cn(
+        'rounded-lg bg-slate-200 dark:bg-slate-700',
+        isMobile ? 'w-9 h-9' : 'w-10 h-10',
+        className
+      )} />
     );
   }
 
   const getIcon = () => {
+    const iconSize = isMobile ? "w-4 h-4" : "w-5 h-5";
     switch (theme) {
       case 'light':
-        return <Sun className="w-4 h-4" />;
+        return <Sun className={iconSize} />;
       case 'dark':
-        return <Moon className="w-4 h-4" />;
+        return <Moon className={iconSize} />;
       case 'auto':
-        return <Monitor className="w-4 h-4" />;
+        return <Monitor className={iconSize} />;
     }
   };
 
@@ -95,7 +102,11 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       size="sm"
       icon={getIcon()}
       onClick={toggleTheme}
-      className={cn('w-10 h-10 p-0', className)}
+      className={cn(
+        'p-0 touch-target',
+        isMobile ? 'w-9 h-9' : 'w-10 h-10',
+        className
+      )}
       title={getTooltip()}
     />
   );

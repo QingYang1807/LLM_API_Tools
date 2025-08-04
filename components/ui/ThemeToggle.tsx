@@ -19,41 +19,51 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   const [theme, setTheme] = useState<ThemeMode>('auto');
   const [mounted, setMounted] = useState(false);
 
+  // 初始化主题
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme') as ThemeMode;
-    if (savedTheme) {
-      setTheme(savedTheme);
+    try {
+      const savedTheme = localStorage.getItem('theme') as ThemeMode;
+      if (savedTheme && ['light', 'dark', 'auto'].includes(savedTheme)) {
+        setTheme(savedTheme);
+      }
+    } catch (error) {
+      console.error('Failed to load theme from localStorage:', error);
     }
   }, []);
 
+  // 应用主题
   useEffect(() => {
     if (!mounted) return;
 
     const root = document.documentElement;
     
-    if (theme === 'auto') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const updateTheme = () => {
-        if (mediaQuery.matches) {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
-      };
+    try {
+      if (theme === 'auto') {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const updateTheme = () => {
+          if (mediaQuery.matches) {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+        };
+        
+        updateTheme();
+        mediaQuery.addEventListener('change', updateTheme);
+        
+        return () => mediaQuery.removeEventListener('change', updateTheme);
+      } else if (theme === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
       
-      updateTheme();
-      mediaQuery.addEventListener('change', updateTheme);
-      
-      return () => mediaQuery.removeEventListener('change', updateTheme);
-    } else if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
+      localStorage.setItem('theme', theme);
+      onThemeChange?.(theme);
+    } catch (error) {
+      console.error('Failed to apply theme:', error);
     }
-    
-    localStorage.setItem('theme', theme);
-    onThemeChange?.(theme);
   }, [theme, mounted, onThemeChange]);
 
   const toggleTheme = () => {
@@ -63,10 +73,11 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     setTheme(themes[nextIndex]);
   };
 
+  // 渲染占位符（防止水合不匹配）
   if (!mounted) {
     return (
       <div className={cn(
-        'rounded-lg bg-slate-200 dark:bg-slate-700',
+        'rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse',
         isMobile ? 'w-9 h-9' : 'w-10 h-10',
         className
       )} />
@@ -82,6 +93,8 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         return <Moon className={iconSize} />;
       case 'auto':
         return <Monitor className={iconSize} />;
+      default:
+        return <Monitor className={iconSize} />;
     }
   };
 
@@ -93,6 +106,8 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         return '深色模式';
       case 'auto':
         return '跟随系统';
+      default:
+        return '跟随系统';
     }
   };
 
@@ -103,7 +118,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       icon={getIcon()}
       onClick={toggleTheme}
       className={cn(
-        'p-0 touch-target',
+        'p-0 touch-target transition-colors duration-200',
         isMobile ? 'w-9 h-9' : 'w-10 h-10',
         className
       )}

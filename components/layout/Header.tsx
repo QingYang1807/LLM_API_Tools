@@ -18,6 +18,7 @@ interface HeaderProps {
   onToggleSidebar?: () => void;
   showSidebar?: boolean;
   onHelpClick?: () => void;
+  isMobile?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,11 +32,12 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSidebar,
   showSidebar = true,
   onHelpClick,
+  isMobile = false,
 }) => {
   const [showSearch, setShowSearch] = useState(false);
 
   return (
-    <header className="glass-effect border-b border-slate-200 dark:border-slate-700 px-4 py-3">
+    <header className="glass-effect border-b border-slate-200 dark:border-slate-700 px-4 py-3 safe-area-top">
       <div className="flex items-center justify-between">
         {/* 左侧：菜单按钮和标题 */}
         <div className="flex items-center gap-3">
@@ -45,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
               size="sm"
               icon={<Menu className="w-5 h-5" />}
               onClick={onToggleSidebar}
-              className="lg:hidden"
+              className={cn("touch-target", isMobile ? "block" : "lg:hidden")}
               title="切换侧边栏"
             />
           )}
@@ -54,7 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">L</span>
             </div>
-            <div className="hidden sm:block">
+            <div className={cn("responsive-text font-semibold", isMobile ? "text-base" : "hidden sm:block")}>
               <h1 className="text-lg font-semibold">LLM API Tools</h1>
             </div>
           </div>
@@ -69,11 +71,12 @@ export const Header: React.FC<HeaderProps> = ({
             onApiConfigChange={onApiConfigChange}
             onModelChange={onModelChange}
             onSettingsClick={onSettingsClick}
+            isMobile={isMobile}
           />
         </div>
 
         {/* 右侧：搜索栏 */}
-        <div className="max-w-md hidden md:block">
+        <div className={cn("max-w-md", isMobile ? "hidden" : "hidden md:block")}>
           {onSearch && (
             <SearchBar
               placeholder="搜索对话和消息..."
@@ -92,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
               size="sm"
               icon={showSearch ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
               onClick={() => setShowSearch(!showSearch)}
-              className="md:hidden"
+              className={cn("touch-target", isMobile ? "block" : "md:hidden")}
               title="搜索"
             />
           )}
@@ -104,6 +107,7 @@ export const Header: React.FC<HeaderProps> = ({
               size="sm"
               icon={<HelpCircle className="w-4 h-4" />}
               onClick={onHelpClick}
+              className="touch-target"
               title="帮助"
             />
           )}
@@ -117,6 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
             size="sm"
             icon={<Settings className="w-4 h-4" />}
             onClick={onSettingsClick}
+            className="touch-target"
             title="设置"
           />
         </div>
@@ -135,7 +140,10 @@ export const Header: React.FC<HeaderProps> = ({
       )}
 
       {/* 状态指示器 */}
-      <div className="flex items-center gap-4 mt-2 text-xs text-slate-500 dark:text-slate-400">
+      <div className={cn(
+        "flex items-center gap-4 mt-2 text-xs text-slate-500 dark:text-slate-400",
+        isMobile ? "flex-wrap gap-2" : ""
+      )}>
         <div className="flex items-center gap-1">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           <span>已连接</span>

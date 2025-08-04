@@ -1,73 +1,129 @@
-# LLM API Tools
+# LLM API Tools - 智能对话助手
 
-一个功能强大的LLM API管理工具，支持多种AI模型，提供直观的聊天界面和丰富的功能特性。
+一个功能强大、界面优雅的跨设备AI对话工具，支持多种大模型API，专为开发者、研究人员和AI爱好者设计。
 
-## ✨ 主要功能
+## ✨ 主要特性
 
-### 🤖 智能对话
-- 支持多种AI模型（智谱AI、OpenAI、Anthropic等）
-- 实时流式响应，打字机效果
-- 智能上下文理解，保持对话连贯性
-- 支持Markdown渲染和代码高亮
+### 🤖 多模型支持
+- **智谱AI (GLM系列)** - 支持GLM-4、GLM-4V等模型
+- **OpenAI** - 支持GPT-3.5、GPT-4等模型
+- **Anthropic** - 支持Claude系列模型
+- **自定义API** - 支持任意兼容OpenAI格式的API
 
-### 💬 消息管理
-- 消息编辑功能，支持快捷键操作
-- 一键复制和下载消息内容
-- 消息搜索功能，快速定位历史对话
-- 多会话管理，独立配置和状态
+### 💬 智能对话体验
+- **实时流式响应** - 打字机效果，即时显示AI回复
+- **上下文记忆** - 智能维护对话上下文
+- **Markdown渲染** - 支持代码高亮、表格、链接等
+- **消息编辑** - 可编辑已发送的消息
+- **多会话管理** - 独立管理多个对话会话
+
+### 📱 跨设备优化
+- **响应式设计** - 完美适配PC、平板、手机
+- **触摸优化** - 移动端手势操作和触摸反馈
+- **PWA支持** - 可安装为原生应用
+- **离线缓存** - 本地存储对话记录
+- **安全区域** - 适配刘海屏、曲面屏
 
 ### 🎨 用户体验
-- 现代化UI设计，支持浅色/深色主题
-- 响应式布局，适配各种设备
-- 丰富的动画效果和交互反馈
-- 快捷键支持，提升操作效率
-
-### ⚙️ 配置管理
-- 多API提供商配置
-- 模型参数自定义
-- 数据导入导出功能
-- 本地数据持久化
+- **深色/浅色主题** - 支持跟随系统主题
+- **快捷键支持** - 丰富的键盘快捷键
+- **搜索功能** - 快速搜索历史对话
+- **数据导出** - 支持多种格式导出
+- **实时通知** - 优雅的Toast通知系统
 
 ## 🚀 快速开始
 
-### 安装依赖
+### 环境要求
+- Node.js 18+ 
+- npm 或 yarn
+
+### 安装步骤
+
+1. **克隆项目**
+```bash
+git clone https://github.com/your-username/llm-api-tools.git
+cd llm-api-tools
+```
+
+2. **安装依赖**
 ```bash
 npm install
+# 或
+yarn install
 ```
 
-### 启动开发服务器
+3. **启动开发服务器**
 ```bash
 npm run dev
+# 或
+yarn dev
 ```
 
-### 构建生产版本
-```bash
-npm run build
-npm start
-```
+4. **打开浏览器**
+访问 [http://localhost:3000](http://localhost:3000)
+
+### 配置API
+
+1. 点击右上角"设置"按钮
+2. 选择"API配置"
+3. 添加您的API密钥和配置信息
+4. 选择要使用的模型
+5. 开始对话！
 
 ## ⌨️ 快捷键
 
 | 快捷键 | 功能 |
 |--------|------|
-| `Cmd/Ctrl + N` | 新建对话 |
-| `Cmd/Ctrl + Enter` | 发送消息 |
-| `Cmd/Ctrl + K` | 清空聊天 |
-| `Cmd/Ctrl + B` | 切换侧边栏 |
-| `Cmd/Ctrl + F` | 搜索 |
-| `Cmd/Ctrl + ,` | 设置 |
+| `Ctrl/Cmd + N` | 新建对话 |
+| `Ctrl/Cmd + Enter` | 发送消息 |
+| `Ctrl/Cmd + K` | 清空聊天 |
+| `Ctrl/Cmd + B` | 切换侧边栏 |
+| `Ctrl/Cmd + F` | 搜索 |
+| `Ctrl/Cmd + M` | 模型选择器 |
+| `Ctrl/Cmd + ,` | 设置 |
 | `Escape` | 取消/退出 |
 
-## 🛠️ 技术栈
+## 📱 移动端特性
 
-- **前端框架**: Next.js 14 + React 18
-- **样式**: Tailwind CSS + Framer Motion
-- **类型安全**: TypeScript
-- **状态管理**: React Hooks
-- **Markdown渲染**: react-markdown + react-syntax-highlighter
-- **快捷键**: react-hotkeys-hook
+### 触摸优化
+- **触摸目标** - 所有按钮最小44px触摸区域
+- **手势操作** - 侧边栏滑动关闭
+- **虚拟键盘** - 自动调整布局适配键盘
+- **安全区域** - 适配各种屏幕尺寸
 
-## 📁 项目结构
+### 移动端快捷键
+- **长按消息** - 快速操作菜单
+- **下拉刷新** - 刷新对话列表
+- **双击** - 快速编辑消息
+
+## 🎯 使用场景
+
+### 开发者
+- **代码调试** - 快速获取编程建议
+- **API测试** - 测试不同模型的响应
+- **文档生成** - 自动生成技术文档
+
+### 研究人员
+- **数据分析** - AI辅助数据分析
+- **论文写作** - 智能写作助手
+- **实验记录** - 记录研究过程
+
+### 内容创作者
+- **创意写作** - 激发创作灵感
+- **内容编辑** - 智能内容优化
+- **多语言翻译** - 跨语言内容创作
+
+## 🔧 技术栈
+
+- **前端框架** - Next.js 14 (App Router)
+- **UI组件** - React + TypeScript
+- **样式系统** - Tailwind CSS
+- **动画库** - Framer Motion
+- **状态管理** - React Hooks
+- **本地存储** - LocalStorage API
+- **PWA** - Next.js PWA支持
+
+## 📦 项目结构
 
 ```
 LLM_API_Tools/
@@ -84,129 +140,61 @@ LLM_API_Tools/
 │   ├── api.ts           # API服务
 │   └── storage.ts       # 存储服务
 ├── types/               # TypeScript类型定义
-└── utils/               # 工具函数
+├── utils/               # 工具函数
+└── public/              # 静态资源
 ```
 
-## 🎯 核心特性
+## 🎨 设计理念
 
-### 1. 多模型支持
-- 智谱AI (GLM-4, GLM-3-Turbo)
-- OpenAI (GPT-4, GPT-3.5)
-- Anthropic (Claude)
-- 自定义API配置
+### 用户体验优先
+- **简洁直观** - 清晰的界面布局
+- **响应迅速** - 流畅的交互体验
+- **易于使用** - 降低学习成本
 
-### 2. 智能交互
-- 流式响应，实时显示
-- 消息编辑和重发
-- 上下文记忆
-- 智能错误处理
+### 跨设备一致性
+- **统一体验** - 在不同设备上保持一致
+- **适配优化** - 针对不同屏幕尺寸优化
+- **性能优化** - 确保在各种设备上流畅运行
 
-### 3. 数据管理
-- 本地存储
-- 数据备份和恢复
-- 多种导出格式
-- 会话管理
-
-### 4. 用户体验
-- 主题切换
-- 响应式设计
-- 快捷键支持
-- 动画效果
-
-## 🔧 配置说明
-
-### API配置
-在设置中可以配置多个API提供商：
-
-1. **智谱AI**
-   - Base URL: `https://open.bigmodel.cn/api/paas/v4`
-   - 需要API Key
-
-2. **OpenAI**
-   - Base URL: `https://api.openai.com/v1`
-   - 需要API Key
-
-3. **自定义**
-   - 支持自定义API端点
-   - 灵活的参数配置
-
-### 模型参数
-- **Temperature**: 控制输出的随机性 (0-2)
-- **Max Tokens**: 最大输出长度
-- **Top P**: 核采样参数
-- **Frequency Penalty**: 频率惩罚
-- **Presence Penalty**: 存在惩罚
-
-## 📝 使用说明
-
-### 开始对话
-1. 点击"新建对话"或使用快捷键 `Cmd/Ctrl + N`
-2. 选择API配置和模型
-3. 开始输入消息
-
-### 管理会话
-- 在侧边栏查看所有对话
-- 点击切换不同会话
-- 右键删除不需要的对话
-
-### 消息操作
-- 点击消息右上角菜单
-- 支持复制、下载、编辑
-- 使用快捷键快速操作
-
-### 搜索功能
-- 使用 `Cmd/Ctrl + F` 打开搜索
-- 搜索历史对话内容
-- 按相关性排序结果
-
-## 🎨 主题定制
-
-支持三种主题模式：
-- **浅色模式**: 明亮清晰的界面
-- **深色模式**: 护眼的暗色主题
-- **跟随系统**: 自动匹配系统主题
-
-## 📱 响应式设计
-
-- 桌面端: 完整功能界面
-- 平板端: 适配中等屏幕
-- 移动端: 优化触摸操作
-
-## 🔒 隐私安全
-
-- 所有数据本地存储
-- 不收集用户信息
-- API密钥本地加密
-- 支持数据导出备份
+### 可扩展性
+- **模块化设计** - 易于添加新功能
+- **插件系统** - 支持第三方扩展
+- **API标准化** - 支持更多AI服务商
 
 ## 🤝 贡献指南
 
-欢迎提交Issue和Pull Request来改进项目！
+我们欢迎所有形式的贡献！
 
-### 开发环境
-1. Fork项目
-2. 创建功能分支
-3. 提交代码
-4. 创建Pull Request
+### 如何贡献
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
 
-### 代码规范
-- 使用TypeScript
-- 遵循ESLint规则
-- 添加适当的注释
-- 编写测试用例
+### 开发规范
+- 使用 TypeScript 进行类型安全开发
+- 遵循 ESLint 和 Prettier 代码规范
+- 编写单元测试覆盖新功能
+- 更新文档说明新特性
 
 ## 📄 许可证
 
-MIT License
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 🙏 致谢
 
-感谢所有开源项目的贡献者，特别是：
-- Next.js团队
-- Tailwind CSS团队
-- React社区
-- 各种开源库的维护者
+- [Next.js](https://nextjs.org/) - 优秀的React框架
+- [Tailwind CSS](https://tailwindcss.com/) - 实用的CSS框架
+- [Framer Motion](https://www.framer.com/motion/) - 流畅的动画库
+- [Lucide Icons](https://lucide.dev/) - 精美的图标库
+
+## 📞 联系我们
+
+- **项目主页**: [GitHub Repository](https://github.com/your-username/llm-api-tools)
+- **问题反馈**: [Issues](https://github.com/your-username/llm-api-tools/issues)
+- **功能建议**: [Discussions](https://github.com/your-username/llm-api-tools/discussions)
 
 ---
 
-**LLM API Tools** - 让AI对话更简单、更高效！ 
+⭐ 如果这个项目对您有帮助，请给我们一个星标！ 

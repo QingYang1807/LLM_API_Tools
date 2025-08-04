@@ -10,6 +10,7 @@ export interface ToastProps {
   message?: string;
   duration?: number;
   onClose: (id: string) => void;
+  isMobile?: boolean;
 }
 
 const toastIcons = {
@@ -33,6 +34,7 @@ export const Toast: React.FC<ToastProps> = ({
   message,
   duration = 5000,
   onClose,
+  isMobile = false,
 }) => {
   const Icon = toastIcons[type];
 
@@ -51,23 +53,36 @@ export const Toast: React.FC<ToastProps> = ({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
       className={cn(
-        'relative p-4 rounded-lg border shadow-lg max-w-sm w-full',
+        'relative rounded-lg border shadow-lg',
+        isMobile ? 'p-3 max-w-full mx-4' : 'p-4 max-w-sm w-full',
         toastStyles[type]
       )}
     >
       <div className="flex items-start gap-3">
-        <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+        <Icon className={cn(
+          "flex-shrink-0 mt-0.5",
+          isMobile ? "w-4 h-4" : "w-5 h-5"
+        )} />
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-sm">{title}</h4>
+          <h4 className={cn(
+            "font-medium",
+            isMobile ? "text-sm" : "text-sm"
+          )}>{title}</h4>
           {message && (
-            <p className="text-sm mt-1 opacity-90">{message}</p>
+            <p className={cn(
+              "mt-1 opacity-90",
+              isMobile ? "text-xs" : "text-sm"
+            )}>{message}</p>
           )}
         </div>
         <button
           onClick={() => onClose(id)}
-          className="flex-shrink-0 w-5 h-5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors flex items-center justify-center"
+          className={cn(
+            "flex-shrink-0 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors flex items-center justify-center touch-target",
+            isMobile ? "w-4 h-4" : "w-5 h-5"
+          )}
         >
-          <X className="w-3 h-3" />
+          <X className={cn("", isMobile ? "w-2.5 h-2.5" : "w-3 h-3")} />
         </button>
       </div>
     </motion.div>
@@ -77,17 +92,22 @@ export const Toast: React.FC<ToastProps> = ({
 export interface ToastContainerProps {
   toasts: ToastProps[];
   onClose: (id: string) => void;
+  isMobile?: boolean;
 }
 
 export const ToastContainer: React.FC<ToastContainerProps> = ({
   toasts,
   onClose,
+  isMobile = false,
 }) => {
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2">
+    <div className={cn(
+      "fixed z-[9999] space-y-2",
+      isMobile ? "top-4 left-4 right-4" : "top-4 right-4"
+    )}>
       <AnimatePresence>
         {toasts.map((toast) => (
-          <Toast key={toast.id} {...toast} onClose={onClose} />
+          <Toast key={toast.id} {...toast} onClose={onClose} isMobile={isMobile} />
         ))}
       </AnimatePresence>
     </div>

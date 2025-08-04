@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Plus, Trash2, Save, TestTube } from 'lucide-react';
 import { generateId } from '@/utils';
+import { cn } from '@/utils';
 
 interface ApiConfigFormProps {
   config?: ApiConfig;
   onSave: (config: ApiConfig) => void;
   onCancel: () => void;
   onTest?: (config: ApiConfig) => Promise<boolean>;
+  isMobile?: boolean;
 }
 
 export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
@@ -19,6 +21,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
   onSave,
   onCancel,
   onTest,
+  isMobile = false,
 }) => {
   const [formData, setFormData] = useState<ApiConfig>({
     id: config?.id || generateId(),
@@ -128,13 +131,17 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className={cn(
+        "grid gap-4",
+        isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+      )}>
         <Input
           label="配置名称"
           value={formData.name}
           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
           error={errors.name}
           placeholder="例如：智谱AI配置"
+          isMobile={isMobile}
         />
 
         <Select
@@ -142,6 +149,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
           value={formData.provider}
           onChange={(value) => setFormData(prev => ({ ...prev, provider: value as any }))}
           options={providerOptions}
+          isMobile={isMobile}
         />
       </div>
 
@@ -151,6 +159,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
         onChange={(e) => setFormData(prev => ({ ...prev, baseUrl: e.target.value }))}
         error={errors.baseUrl}
         placeholder="https://api.example.com/v1/chat/completions"
+        isMobile={isMobile}
       />
 
       <Input
@@ -160,29 +169,38 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
         onChange={(e) => setFormData(prev => ({ ...prev, apiKey: e.target.value }))}
         error={errors.apiKey}
         placeholder="输入您的API密钥"
+        isMobile={isMobile}
       />
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">模型配置</h3>
+          <h3 className={cn(
+            "font-medium",
+            isMobile ? "text-base" : "text-lg"
+          )}>模型配置</h3>
           <Button
             variant="outline"
             size="sm"
-            icon={<Plus className="w-4 h-4" />}
+            icon={<Plus className={cn("", isMobile ? "w-3 h-3" : "w-4 h-4")} />}
             onClick={addModel}
+            className="touch-target"
           >
-            添加模型
+            {isMobile ? "添加" : "添加模型"}
           </Button>
         </div>
 
         {formData.models.map((model, index) => (
           <Card key={model.id} className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className={cn(
+              "grid gap-4",
+              isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+            )}>
               <Input
                 label="模型名称"
                 value={model.name}
                 onChange={(e) => updateModel(index, { ...model, name: e.target.value })}
                 placeholder="例如：glm-4.5"
+                isMobile={isMobile}
               />
 
               <Input
@@ -190,6 +208,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
                 value={model.displayName}
                 onChange={(e) => updateModel(index, { ...model, displayName: e.target.value })}
                 placeholder="例如：GLM-4.5"
+                isMobile={isMobile}
               />
 
               <Input
@@ -199,6 +218,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
                 onChange={(e) => updateModel(index, { ...model, maxTokens: parseInt(e.target.value) || 4096 })}
                 min={1}
                 max={32768}
+                isMobile={isMobile}
               />
 
               <Input
@@ -209,6 +229,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
                 onChange={(e) => updateModel(index, { ...model, temperature: parseFloat(e.target.value) || 0.7 })}
                 min={0}
                 max={2}
+                isMobile={isMobile}
               />
 
               <Input
@@ -219,16 +240,18 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
                 onChange={(e) => updateModel(index, { ...model, topP: parseFloat(e.target.value) || 0.9 })}
                 min={0}
                 max={1}
+                isMobile={isMobile}
               />
 
               <div className="flex items-end">
                 <Button
                   variant="danger"
                   size="sm"
-                  icon={<Trash2 className="w-4 h-4" />}
+                  icon={<Trash2 className={cn("", isMobile ? "w-3 h-3" : "w-4 h-4")} />}
                   onClick={() => removeModel(index)}
+                  className="touch-target"
                 >
-                  删除
+                  {isMobile ? "删除" : "删除"}
                 </Button>
               </div>
             </div>
@@ -240,11 +263,15 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
         )}
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className={cn(
+        "flex items-center gap-4",
+        isMobile ? "flex-col" : "flex-row"
+      )}>
         <Button
           variant="primary"
-          icon={<Save className="w-4 h-4" />}
+          icon={<Save className={cn("", isMobile ? "w-3 h-3" : "w-4 h-4")} />}
           onClick={handleSave}
+          className="touch-target w-full"
         >
           保存配置
         </Button>
@@ -252,9 +279,10 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
         {onTest && (
           <Button
             variant="outline"
-            icon={<TestTube className="w-4 h-4" />}
+            icon={<TestTube className={cn("", isMobile ? "w-3 h-3" : "w-4 h-4")} />}
             onClick={handleTest}
             loading={isTesting}
+            className="touch-target w-full"
           >
             测试连接
           </Button>
@@ -263,6 +291,7 @@ export const ApiConfigForm: React.FC<ApiConfigFormProps> = ({
         <Button
           variant="ghost"
           onClick={onCancel}
+          className="touch-target w-full"
         >
           取消
         </Button>

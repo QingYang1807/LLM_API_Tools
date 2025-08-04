@@ -9,6 +9,7 @@ interface MessageInputProps {
   loading?: boolean;
   placeholder?: string;
   className?: string;
+  isMobile?: boolean;
 }
 
 export const MessageInput: React.FC<MessageInputProps> = ({
@@ -17,13 +18,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   loading = false,
   placeholder = '输入您的消息...',
   className,
+  isMobile = false,
 }) => {
   const [message, setMessage] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [rows, setRows] = useState(1);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const maxRows = 6;
+  const maxRows = isMobile ? 4 : 6;
   const minRows = 1;
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       const newRows = Math.min(maxRows, Math.max(minRows, Math.ceil(scrollHeight / lineHeight)));
       setRows(newRows);
     }
-  }, [message]);
+  }, [message, maxRows]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -80,7 +82,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <div className={cn('relative', className)}>
-      <div className="flex items-end gap-2 p-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-600 rounded-lg">
+      <div className={cn(
+        "flex items-end gap-2 p-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-600 rounded-lg",
+        isMobile ? "p-3 gap-1" : ""
+      )}>
         {/* 文件上传按钮 */}
         <label className="flex-shrink-0">
           <input
@@ -93,7 +98,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             variant="ghost"
             size="sm"
             icon={<Paperclip className="w-4 h-4" />}
-            className="w-10 h-10 p-0"
+            className={cn(
+              "p-0 touch-target",
+              isMobile ? "w-9 h-9" : "w-10 h-10"
+            )}
             title="上传文件"
           />
         </label>
@@ -112,7 +120,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               'w-full resize-none border-none outline-none bg-transparent',
               'text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500',
               'focus:ring-0 focus:border-none',
-              'disabled:opacity-50 disabled:cursor-not-allowed'
+              'disabled:opacity-50 disabled:cursor-not-allowed',
+              isMobile ? 'text-sm' : 'text-base'
             )}
             style={{
               minHeight: `${minRows * 1.5}rem`,
@@ -135,8 +144,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           icon={isRecording ? <StopCircle className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           onClick={handleVoiceRecord}
           className={cn(
-            'w-10 h-10 p-0',
-            isRecording && 'text-red-500 animate-pulse'
+            'p-0 touch-target',
+            isRecording && 'text-red-500 animate-pulse',
+            isMobile ? "w-9 h-9" : "w-10 h-10"
           )}
           title={isRecording ? '停止录音' : '语音输入'}
         />
@@ -146,7 +156,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           variant="ghost"
           size="sm"
           icon={<Smile className="w-4 h-4" />}
-          className="w-10 h-10 p-0"
+          className={cn(
+            "p-0 touch-target",
+            isMobile ? "w-9 h-9" : "w-10 h-10"
+          )}
           title="插入表情"
         />
 
@@ -158,13 +171,19 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           onClick={handleSend}
           disabled={isSendDisabled}
           loading={loading}
-          className="w-10 h-10 p-0"
+          className={cn(
+            "p-0 touch-target",
+            isMobile ? "w-9 h-9" : "w-10 h-10"
+          )}
           title="发送消息 (Enter)"
         />
       </div>
 
       {/* 快捷键提示 */}
-      <div className="mt-2 text-xs text-slate-500 dark:text-slate-400 text-center">
+      <div className={cn(
+        "mt-2 text-xs text-slate-500 dark:text-slate-400 text-center",
+        isMobile ? "hidden" : "block"
+      )}>
         Enter 发送，Shift+Enter 换行
       </div>
 

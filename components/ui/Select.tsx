@@ -14,6 +14,7 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   options: SelectOption[];
   onChange?: (value: string) => void;
   placeholder?: string;
+  isMobile?: boolean;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -26,6 +27,7 @@ export const Select: React.FC<SelectProps> = ({
   className,
   id,
   value,
+  isMobile = false,
   ...props
 }) => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
@@ -39,7 +41,10 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={selectId} className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+        <label htmlFor={selectId} className={cn(
+          "block font-medium text-slate-700 dark:text-slate-300 mb-2",
+          isMobile ? "text-sm" : "text-sm"
+        )}>
           {label}
         </label>
       )}
@@ -50,6 +55,7 @@ export const Select: React.FC<SelectProps> = ({
           'bg-[url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'m6 8 4 4 4-4\'/%3e%3c/svg%3e")]',
           'bg-[length:1.5em_1.5em] bg-[right_0.5rem_center]',
           error && 'border-red-500 focus:ring-red-500',
+          isMobile && 'text-sm',
           className
         )}
         value={value}
@@ -72,10 +78,16 @@ export const Select: React.FC<SelectProps> = ({
         ))}
       </select>
       {error && (
-        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p className={cn(
+          "mt-1 text-red-600 dark:text-red-400",
+          isMobile ? "text-xs" : "text-sm"
+        )}>{error}</p>
       )}
       {helperText && !error && (
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{helperText}</p>
+        <p className={cn(
+          "mt-1 text-slate-500 dark:text-slate-400",
+          isMobile ? "text-xs" : "text-sm"
+        )}>{helperText}</p>
       )}
     </div>
   );

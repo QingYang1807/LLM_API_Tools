@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { formatDate, truncateText } from '@/utils';
 import { StorageService } from '@/services/storage';
+import { cn } from '@/utils';
 
 interface SidebarProps {
   chatSessions: ChatSession[];
@@ -29,6 +30,7 @@ interface SidebarProps {
   showSettings: boolean;
   onCloseSettings: () => void;
   onOpenSettings: () => void;
+  isMobile?: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -44,6 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   showSettings,
   onCloseSettings,
   onOpenSettings,
+  isMobile = false,
 }) => {
   const [editingConfig, setEditingConfig] = useState<ApiConfig | null>(null);
 
@@ -88,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   if (showSettings) {
     return (
-      <div className="w-80 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col">
+      <div className="w-full h-full bg-white dark:bg-slate-800 flex flex-col">
         <div className="p-4 border-b border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">设置</h2>
@@ -97,6 +100,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               size="sm"
               icon={<X className="w-4 h-4" />}
               onClick={onCloseSettings}
+              className="touch-target"
             />
           </div>
         </div>
@@ -120,6 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => setEditingConfig(config)}
+                        className="touch-target"
                       >
                         编辑
                       </Button>
@@ -132,7 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   size="sm"
                   icon={<Plus className="w-4 h-4" />}
                   onClick={() => setEditingConfig({} as ApiConfig)}
-                  className="w-full"
+                  className="w-full touch-target"
                 >
                   添加配置
                 </Button>
@@ -148,7 +153,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   size="sm"
                   icon={<Download className="w-4 h-4" />}
                   onClick={handleExportData}
-                  className="w-full"
+                  className="w-full touch-target"
                 >
                   导出数据
                 </Button>
@@ -165,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       variant="outline"
                       size="sm"
                       icon={<Upload className="w-4 h-4" />}
-                      className="w-full"
+                      className="w-full touch-target"
                       onClick={() => {
                         const input = document.querySelector('input[type="file"]') as HTMLInputElement;
                         input?.click();
@@ -180,7 +185,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   variant="danger"
                   size="sm"
                   onClick={handleClearData}
-                  className="w-full"
+                  className="w-full touch-target"
                 >
                   清除所有数据
                 </Button>
@@ -194,7 +199,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   if (editingConfig !== null) {
     return (
-      <div className="w-80 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col">
+      <div className="w-full h-full bg-white dark:bg-slate-800 flex flex-col">
         <div className="p-4 border-b border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">
@@ -205,6 +210,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               size="sm"
               icon={<X className="w-4 h-4" />}
               onClick={() => setEditingConfig(null)}
+              className="touch-target"
             />
           </div>
         </div>
@@ -217,6 +223,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               setEditingConfig(null);
             }}
             onCancel={() => setEditingConfig(null)}
+            isMobile={isMobile}
           />
         </div>
       </div>
@@ -224,14 +231,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }
 
   return (
-    <div className="w-80 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col">
+    <div className="w-full h-full bg-white dark:bg-slate-800 flex flex-col">
       {/* 新建对话按钮 */}
       <div className="p-4 border-b border-slate-200 dark:border-slate-700">
         <Button
           variant="primary"
           icon={<Plus className="w-4 h-4" />}
           onClick={onNewChat}
-          className="w-full"
+          className="w-full touch-target"
         >
           新建对话
         </Button>
@@ -250,23 +257,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {chatSessions.map((session) => (
               <div
                 key={session.id}
-                className={`
-                  group relative p-3 rounded-lg cursor-pointer transition-colors
+                className={cn(`
+                  group relative p-3 rounded-lg cursor-pointer transition-colors touch-target
                   ${currentSession?.id === session.id
                     ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
                     : 'hover:bg-slate-50 dark:hover:bg-slate-700/50'
                   }
-                `}
+                `)}
                 onClick={() => onSwitchSession(session)}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium truncate">
+                    <h4 className="font-medium truncate responsive-text">
                       {session.title}
                     </h4>
                     <p className="text-sm text-slate-500 dark:text-slate-400 truncate">
                       {session.messages.length > 0
-                        ? truncateText(session.messages[session.messages.length - 1].content, 50)
+                        ? truncateText(session.messages[session.messages.length - 1].content, isMobile ? 30 : 50)
                         : '暂无消息'
                       }
                     </p>
@@ -275,7 +282,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </p>
                   </div>
                   
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className={cn(
+                    "flex items-center gap-1 transition-opacity",
+                    isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                  )}>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -284,6 +294,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         e.stopPropagation();
                         onDeleteSession(session.id);
                       }}
+                      className="touch-target"
                       title="删除对话"
                     />
                     <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -296,12 +307,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* 底部操作 */}
-      <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+      <div className="p-4 border-t border-slate-200 dark:border-slate-700 safe-area-bottom">
         <Button
           variant="ghost"
           icon={<Settings className="w-4 h-4" />}
           onClick={onOpenSettings}
-          className="w-full"
+          className="w-full touch-target"
         >
           设置
         </Button>

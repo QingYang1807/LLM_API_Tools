@@ -3,6 +3,7 @@ import { ApiConfig, ModelConfig } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ChevronUp, Settings, Zap } from 'lucide-react';
+import { cn } from '@/utils';
 
 interface QuickModelSwitchProps {
   apiConfigs: ApiConfig[];
@@ -11,6 +12,7 @@ interface QuickModelSwitchProps {
   onApiConfigChange: (config: ApiConfig) => void;
   onModelChange: (model: ModelConfig) => void;
   onSettingsClick: () => void;
+  isMobile?: boolean;
 }
 
 export const QuickModelSwitch: React.FC<QuickModelSwitchProps> = ({
@@ -20,6 +22,7 @@ export const QuickModelSwitch: React.FC<QuickModelSwitchProps> = ({
   onApiConfigChange,
   onModelChange,
   onSettingsClick,
+  isMobile = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -30,9 +33,15 @@ export const QuickModelSwitch: React.FC<QuickModelSwitchProps> = ({
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className={cn(
+      "fixed z-[9999]",
+      isMobile ? "bottom-4 right-4" : "bottom-6 right-6"
+    )}>
       {isExpanded && (
-        <Card className="mb-2 p-3 bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700">
+        <Card className={cn(
+          "mb-2 p-3 bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700",
+          isMobile ? "max-w-xs" : "max-w-sm"
+        )}>
           <div className="space-y-2">
             <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
               快速切换
@@ -43,25 +52,31 @@ export const QuickModelSwitch: React.FC<QuickModelSwitchProps> = ({
                   {config.name}
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {config.models.slice(0, 3).map((model) => (
+                  {config.models.slice(0, isMobile ? 2 : 3).map((model) => (
                     <Button
                       key={model.id}
                       variant={currentModel?.id === model.id ? "primary" : "ghost"}
                       size="sm"
                       onClick={() => handleQuickSwitch(config, model)}
-                      className="text-xs h-6 px-2"
+                      className={cn(
+                        "text-xs touch-target",
+                        isMobile ? "h-8 px-2" : "h-6 px-2"
+                      )}
                     >
                       {model.displayName}
                     </Button>
                   ))}
-                  {config.models.length > 3 && (
+                  {config.models.length > (isMobile ? 2 : 3) && (
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={onSettingsClick}
-                      className="text-xs h-6 px-2"
+                      className={cn(
+                        "text-xs touch-target",
+                        isMobile ? "h-8 px-2" : "h-6 px-2"
+                      )}
                     >
-                      +{config.models.length - 3}
+                      +{config.models.length - (isMobile ? 2 : 3)}
                     </Button>
                   )}
                 </div>
@@ -73,7 +88,10 @@ export const QuickModelSwitch: React.FC<QuickModelSwitchProps> = ({
                 size="sm"
                 icon={<Settings className="w-3 h-3" />}
                 onClick={onSettingsClick}
-                className="w-full text-xs h-6"
+                className={cn(
+                  "w-full text-xs touch-target",
+                  isMobile ? "h-8" : "h-6"
+                )}
               >
                 管理配置
               </Button>
@@ -87,7 +105,10 @@ export const QuickModelSwitch: React.FC<QuickModelSwitchProps> = ({
         size="lg"
         icon={isExpanded ? <ChevronUp className="w-5 h-5" /> : <Zap className="w-5 h-5" />}
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-12 h-12 rounded-full shadow-lg"
+        className={cn(
+          "rounded-full shadow-lg touch-target",
+          isMobile ? "w-14 h-14" : "w-12 h-12"
+        )}
         title="快速切换模型"
       />
     </div>
